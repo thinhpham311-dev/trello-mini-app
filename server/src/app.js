@@ -2,7 +2,7 @@ const express = require("express");
 require('dotenv').config();
 const path = require("path");
 const cors = require("cors");
-const { db } = require('./config/firebase');
+const { db } = require('./lib/firebase/firebase.db.js');
 
 const indexRouter = require("./routes/index");
 
