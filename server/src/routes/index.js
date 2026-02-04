@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const BoardRouter = require('../modules/boards/boards.routes.js');
+const api = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index');
-});
 
-module.exports = router;
+api.use('/v1/api/boards', BoardRouter);
+
+
+module.exports = {api};

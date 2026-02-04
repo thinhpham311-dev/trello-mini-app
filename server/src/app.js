@@ -2,24 +2,16 @@ const express = require("express");
 require('dotenv').config();
 const path = require("path");
 const cors = require("cors");
-const { db } = require('./lib/firebase/firebase.db.js');
-
-const indexRouter = require("./routes/index");
+const {api} = require('./routes/index.js');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
-app.get('/test-db', async (req, res) => {
-  await db.collection('users').add({
-    name: 'Thinh',
-    createdAt: new Date(),
-  });
+app.use('/', api);
 
-  res.send('Firebase connected ✅');
-});
 
-app.use("/", indexRouter);
+
 
 module.exports = app;
