@@ -34,6 +34,25 @@ const createBoard = async function(req, res) {
   }
 };
 
+const getAllBoards = async(req, res) =>{
+    try {
+      const options = {
+        search: req.query.search,
+      };
+
+      const userId = req.user?.id;
+      const result = await boardsService.getAllBoards(options, userId);
+
+      res.status(result.success ? 200 : 400).json(result);
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error'
+      });
+    }
+}
+
 module.exports = {
   createBoard: createBoard,
+  getAllBoards: getAllBoards,
 };
