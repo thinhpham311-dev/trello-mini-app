@@ -20,7 +20,7 @@ class BoardsService {
             }
             
            return await this.repository.create(board.toJSON());
-                
+
         } catch (error) {
             return {
                 success: false,
@@ -28,6 +28,27 @@ class BoardsService {
             };
         }
     };
+
+    /**
+   * Lấy tất cả boards với các tùy chọn
+   * @param {Object} options - Tùy chọn query
+   * @returns {Promise<Object>} Danh sách boards
+   */
+async getAllBoards(options = {}) {
+    try {
+        const queryOptions = { ...options };
+
+        return await this.repository.retrieveAllBoards(queryOptions);
+
+    } catch (error) {
+        return {
+            success: false,
+            message: 'Failed to retrieve boards',
+            error: error.message
+        };
+    }
+}
+
 }
 
 const boardsService = new BoardsService();

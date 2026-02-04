@@ -39,6 +39,51 @@ class BoardsRepository extends AdminRepository {
     }
   }
 
+  /**
+   * Retrieve all boards with pagination and search
+   * @param {Object} options - Query options
+   * @param {string} options.search - Text search in name and description
+   * @returns {Promise<Object>} Query result with data and pagination info
+   */
+  async retrieveAllBoards(options = {}) {
+    try {
+      const {
+        search = '',
+      } = options;
+
+      let query = this.collectionRef;
+
+      let snapshot;
+
+      snapshot = await query.get();
+      
+      const boards = [];
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        boards.push(data);
+      });
+
+      let filteredBoards = boards;
+      if (search.trim()) {
+        const searchTerm = search.toLowerCase().trim();
+        filteredBoards = boards.filter(board => {
+          return (
+            (board.name && board.name.toLowerCase().includes(searchTerm)) ||
+            (board.description && board.description.toLowerCase().includes(searchTerm))
+          );
+        });
+      }
+
+      return {
+        success: true,
+        data: filteredBoards,
+      };
+
+    } catch (error) {
+      return this.errorResponse(error, 'retrieveAllBoards');
+    }
+  }
 }
 
 module.exports = {
