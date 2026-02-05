@@ -3,16 +3,12 @@ import { Menu, Dropdown } from '../ui'
 import { Link } from 'react-router-dom'
 import VerticalMenuIcon from './VerticalMenuIcon'
 import { Trans } from 'react-i18next'
-import { AuthorityCheck } from '../shared'
 
 const { MenuItem, MenuCollapse } = Menu
 
-const DefaultItem = ({nav, onLinkClick, userAuthority}) => {
+const DefaultItem = ({nav, onLinkClick}) => {
 	return (
-		<AuthorityCheck 
-			userAuthority={userAuthority} 
-			authority={nav.authority}
-		>
+	
 			<MenuCollapse
 				label={
 					<>
@@ -29,11 +25,7 @@ const DefaultItem = ({nav, onLinkClick, userAuthority}) => {
 			>
 				{
 					nav.subMenu.map(subNav => (
-						<AuthorityCheck 
-							userAuthority={userAuthority} 
-							authority={subNav.authority}
-							key={subNav.key}
-						>
+					
 							<MenuItem eventKey={subNav.key}> 
 								{subNav.path 
 									? 
@@ -58,15 +50,13 @@ const DefaultItem = ({nav, onLinkClick, userAuthority}) => {
 									</span>
 								}
 							</MenuItem>
-						</AuthorityCheck>
 					))
 				}
 			</MenuCollapse>
-		</AuthorityCheck>
 	)
 }
 
-const CollapsedItem = ({nav, onLinkClick, userAuthority}) => {
+const CollapsedItem = ({nav, onLinkClick}) => {
 
 	const menuItem = (
 		<MenuItem key={nav.key} eventKey={nav.key} className="mb-2">
@@ -75,18 +65,11 @@ const CollapsedItem = ({nav, onLinkClick, userAuthority}) => {
 	)
 
 	return (
-		<AuthorityCheck 
-			userAuthority={userAuthority} 
-			authority={nav.authority}
-		>
+		
 			<Dropdown trigger="hover" renderTitle={menuItem} placement="middle-start-top">
 				{
 					nav.subMenu.map(subNav => (
-						<AuthorityCheck 
-							userAuthority={userAuthority} 
-							authority={subNav.authority}
-							key={subNav.key}
-						>
+					
 							<Dropdown.Item eventKey={subNav.key}> 
 								{subNav.path 
 									? 
@@ -111,11 +94,9 @@ const CollapsedItem = ({nav, onLinkClick, userAuthority}) => {
 									</span>
 								}
 							</Dropdown.Item>
-						</AuthorityCheck>
 					))
 				}
 			</Dropdown>
-		</AuthorityCheck>
 	)
 }
 
