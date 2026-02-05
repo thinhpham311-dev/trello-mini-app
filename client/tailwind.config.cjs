@@ -1,16 +1,17 @@
-const flattenColorPalette = require('tailwindcss/lib/util/flattenColorPalette').default
+const flattenColorPalette =
+  require('tailwindcss/lib/util/flattenColorPalette').default
+
 const safeListFile = 'safelist.txt'
+
 module.exports = {
-  mode: 'jit',
-  content: [
-    "./src/**/*.html",
-    "./src/**/*.js",
-    "./src/**/*.jsx",
-    "./src/**/*.ts",
-    "./src/**/*.tsx",
-    './safelist.txt'
-  ],
   darkMode: 'class',
+
+  content: [
+    './index.html',
+    './src/**/*.{js,jsx,ts,tsx}',
+    './safelist.txt',
+  ],
+
   theme: {
     fontFamily: {
       sans: [
@@ -42,14 +43,16 @@ module.exports = {
         'monospace',
       ],
     },
+
     screens: {
-      xs: '576',
+      xs: '576px',
       sm: '640px',
       md: '768px',
       lg: '1024px',
       xl: '1280px',
       '2xl': '1536px',
     },
+
     extend: {
       typography: (theme) => ({
         DEFAULT: {
@@ -63,29 +66,26 @@ module.exports = {
             color: theme('colors.gray.400'),
           },
         },
-      })
+      }),
     },
   },
+
   plugins: [
-    ({ addUtilities, e, theme, variants }) => {
-      const colors = flattenColorPalette(theme('borderColor'));
-      delete colors['default'];
+    ({ addUtilities, theme }) => {
+      const colors = flattenColorPalette(theme('borderColor'))
+      delete colors.DEFAULT
 
-      const colorMap = Object.keys(colors)
-        .map(color => ({
-          [`.border-t-${color}`]: {borderTopColor: colors[color]},
-          [`.border-r-${color}`]: {borderRightColor: colors[color]},
-          [`.border-b-${color}`]: {borderBottomColor: colors[color]},
-          [`.border-l-${color}`]: {borderLeftColor: colors[color]},
-        }));
-      const utilities = Object.assign({}, ...colorMap);
+      const utilities = Object.entries(colors).reduce((acc, [key, value]) => {
+        acc[`.border-t-${key}`] = { borderTopColor: value }
+        acc[`.border-r-${key}`] = { borderRightColor: value }
+        acc[`.border-b-${key}`] = { borderBottomColor: value }
+        acc[`.border-l-${key}`] = { borderLeftColor: value }
+        return acc
+      }, {})
 
-      addUtilities(utilities, variants('borderColor'));
+      addUtilities(utilities)
     },
-    // If your application does not require multiple theme selection,
-    // you can replace {color} to your theme color value
-    // this can drastically reduces the size of the output css file
-    // e.g 'text-{colors}' --> 'text-emerald'
+
     require('tailwind-safelist-generator')({
       path: safeListFile,
       patterns: [
@@ -110,6 +110,7 @@ module.exports = {
         'w-{width}',
       ],
     }),
-    require('@tailwindcss/typography')
+
+    require('@tailwindcss/typography'),
   ],
 }
