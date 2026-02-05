@@ -40,7 +40,7 @@ Board.prototype.validate = function() {
   if (this.description && this.description.length > 1000) {
     errors.push('Description cannot exceed 1000 characters');
   }
-  
+
 
   const validStatuses = ['active', 'archived'];
   if (this.status && !validStatuses.includes(this.status)) {
@@ -69,6 +69,13 @@ Board.prototype.toJSON = function() {
 
 
 Board.create = function(data) {
+  return new Board({
+    name: data.name || '',
+    description: data.description || '',
+  });
+};
+
+Board.update = function(data) {
   return new Board({
     name: data.name || '',
     description: data.description || '',
