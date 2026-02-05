@@ -20,7 +20,6 @@ const SideNav = () => {
 	const themeColor = useSelector(state => state.theme.themeColor)
 	const primaryColorLevel = useSelector(state => state.theme.primaryColorLevel)
 	const navMode = useSelector(state => state.theme.navMode)
-	const direction = useSelector(state => state.theme.direction)
 
 	const { larger } = useResponsive()
 
@@ -40,17 +39,12 @@ const SideNav = () => {
 						classNames(
 							'side-nav',
 							sideNavColor(),
-							'side-nav-expand'
 						)
 					}
 				>
-				
 						<div className="side-nav-content">
-							<ScrollBar autoHide direction={direction}>
 								<p>Sidebar</p>
-							</ScrollBar>
 						</div>
-					
 				</div>
 			)}
 		</>

@@ -9,6 +9,7 @@ import {
 	LOGO_X_GUTTER,
 } from '../../constants/theme.constant'
 import Logo from '../template/Logo'
+import SideNav from '../template/SideNav'
 import { useSelector } from 'react-redux'
 
 const HeaderActionsStart = () => {
@@ -58,8 +59,16 @@ const ModernLayout = props => {
 						headerEnd={<HeaderActionsEnd />} 
 						headerStart={<HeaderActionsStart />}
 					/>
-					<div className='p-10'>
-					<View {...props} />
+					<div className='flex flex-auto min-w-0'>
+					{/* SIDENAV */}
+						<div className="flex-shrink-0">
+							<SideNav />
+						</div>
+
+						{/* VIEW / CONTENT */}
+						<div className="flex flex-auto w-full overflow-auto">
+							<View {...props} />
+						</div>
 					</div>
 				</div>
 			</div>
