@@ -70,6 +70,26 @@ const updateBoard = async function(req, res) {
     }
 }
 
+const deleteBoard = async function(req, res) {
+    try {
+        const { id } = req.params;
+        if (!id || typeof id !== 'string' || id.trim() === '') {
+            return errorResponse(res, 400, 'Board ID is required');
+        }
+
+        const result = await boardsService.deleteBoard(id.trim());
+
+        if (!result.success) {
+            return errorResponse(res, 400, result.message || 'Failed to delete board');
+        }
+
+        return successResponse(res, 200, { id: id });
+
+    } catch (error) {
+        return errorResponse(res, 500, 'Internal server error');
+    }
+}
+
 const getAllBoards = async(req, res) =>{
     try {
       const options = {
@@ -132,6 +152,7 @@ const getBoardsByIds = async function(req, res) {
 module.exports = {
   createBoard: createBoard,
   updateBoard: updateBoard,
+  deleteBoard: deleteBoard,
   getAllBoards: getAllBoards,
   getBoardsById: getBoardsById,
   getBoardsByIds: getBoardsByIds

@@ -47,6 +47,18 @@ class BoardsService {
             };
         }
     }
+
+    deleteBoard = async function(boardId) {
+        try {
+            return await this.repository.delete(boardId);
+        } catch (error) {
+            return {
+                success: false,
+                error: 'Failed to delete board: ' + error.message
+            };
+        }
+    }
+
     /**
    * Lấy tất cả boards với các tùy chọn
    * @param {Object} options - Tùy chọn query

@@ -67,6 +67,20 @@ class BoardsRepository extends AdminRepository {
     }
   }
 
+  async delete(boardId) {
+    try{
+      const docRef = this.collectionRef.doc(boardId);
+      await docRef.delete();
+      
+      return {
+        success: true,
+        id: boardId,
+      };
+    }catch(error){
+      return this.errorResponse(error, 'delete');
+    }
+  }
+
   /**
    * Retrieve all boards with pagination and search
    * @param {Object} options - Query options
