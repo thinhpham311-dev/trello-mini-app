@@ -1,14 +1,41 @@
 import React from 'react'
 import Header from '../template/Header'
 import View from '../../views'
-import SideNavToggle from '../template/SideNavToggle'
 import MobileNav from '../template/MobileNav'
+import { 
+	NAV_MODE_DARK, 
+	NAV_MODE_THEMED, 
+	NAV_MODE_TRANSPARENT,
+	LOGO_X_GUTTER,
+} from '../../constants/theme.constant'
+import Logo from '../template/Logo'
+import { useSelector } from 'react-redux'
 
 const HeaderActionsStart = () => {
+	const navMode = useSelector(state => state.theme.navMode)
+	const mode = useSelector(state => state.theme.mode)
+
+	const logoMode = () => {
+		if(navMode === NAV_MODE_THEMED) {
+			return NAV_MODE_DARK
+		}
+
+		if(navMode === NAV_MODE_TRANSPARENT) {
+			return mode
+		}
+
+		return navMode
+	}
+
 	return (
 		<>
-					<MobileNav />
-			<SideNavToggle/>
+			<MobileNav />
+			<Logo 
+				imgClass="w-[36px] h-[36px]"
+				mode={logoMode()} 
+				type={'full'} 
+				gutter={LOGO_X_GUTTER} 
+			/>
 		</>
 	)
 }
@@ -31,7 +58,9 @@ const ModernLayout = props => {
 						headerEnd={<HeaderActionsEnd />} 
 						headerStart={<HeaderActionsStart />}
 					/>
+					<div className='p-10'>
 					<View {...props} />
+					</div>
 				</div>
 			</div>
 		</div>

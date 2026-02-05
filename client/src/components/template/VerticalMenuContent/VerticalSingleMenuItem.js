@@ -3,7 +3,6 @@ import { Menu, Tooltip } from '../ui'
 import VerticalMenuIcon from './VerticalMenuIcon'
 import { Link } from 'react-router-dom'
 import { Trans, useTranslation } from 'react-i18next'
-import { AuthorityCheck } from '../shared'
 
 const { MenuItem } = Menu
 
@@ -19,10 +18,9 @@ const CollapsedItem = ({title, translateKey, children}) => {
 
 const DefaultItem = (props) => {
 
-	const { nav, onLinkClick, sideCollapsed, userAuthority } = props
+	const { nav, onLinkClick, sideCollapsed  } = props
 
 	return (
-		<AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
 			<MenuItem key={nav.key} eventKey={nav.key} className="mb-2">
 				<Link 
 					to={nav.path} 
@@ -41,14 +39,13 @@ const DefaultItem = (props) => {
 					)}
 				</Link>
 			</MenuItem>
-		</AuthorityCheck>
 	)
 }
 
-const VerticalSingleMenuItem = ({nav, onLinkClick, sideCollapsed, userAuthority}) => {
+const VerticalSingleMenuItem = ({nav, onLinkClick, sideCollapsed}) => {
 
 	return (
-		<AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
+		<>
 			{
 				sideCollapsed ? (
 					<CollapsedItem title={nav.title} translateKey={nav.translateKey}>
@@ -56,7 +53,6 @@ const VerticalSingleMenuItem = ({nav, onLinkClick, sideCollapsed, userAuthority}
 							nav={nav} 
 							sideCollapsed={sideCollapsed} 
 							onLinkClick={onLinkClick}
-							userAuthority={userAuthority}
 						/>
 					</CollapsedItem>
 				)
@@ -66,11 +62,10 @@ const VerticalSingleMenuItem = ({nav, onLinkClick, sideCollapsed, userAuthority}
 						nav={nav} 
 						sideCollapsed={sideCollapsed} 
 						onLinkClick={onLinkClick}
-						userAuthority={userAuthority}
 					/>
 				)
 			}
-		</AuthorityCheck>
+		</>
 	)
 }
 
