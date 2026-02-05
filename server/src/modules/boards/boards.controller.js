@@ -52,7 +52,50 @@ const getAllBoards = async(req, res) =>{
     }
 }
 
+
+const getBoardsById = async function(req, res) {
+    try {
+        const {id} = req.params;
+        if (!id || typeof id !== 'string' || id.trim() === '') {
+            return errorResponse(res, 400, 'Board ID is required');
+        }
+        
+        const result = await boardsService.getBoardsById(id.trim());
+        
+        if (!result.success) {
+            return errorResponse(res, 404, result.message || 'Board not found');
+        }
+        
+        return successResponse(res, 200, result.data);
+        
+    } catch (error) {
+        return errorResponse(res, 500, 'Internal server error');
+    }
+}
+
+const getBoardsByIds = async function(req, res) {
+    try {
+        const { boardIds } = req.body;
+        if (!Array.isArray(boardIds) || boardIds.length === 0) {
+            return errorResponse(res, 400, 'Board IDs array is required');
+        }
+        
+        const result = await boardsService.getBoardsByIds(boardIds);
+        
+        if (!result.success) {
+            return errorResponse(res, 400, result.message || 'Failed to retrieve boards');
+        }
+        
+        return successResponse(res, 200, result.data);
+        
+    } catch (error) {
+        return errorResponse(res, 500, 'Internal server error');
+    }
+}
+
 module.exports = {
   createBoard: createBoard,
   getAllBoards: getAllBoards,
+  getBoardsById: getBoardsById,
+  getBoardsByIds: getBoardsByIds
 };

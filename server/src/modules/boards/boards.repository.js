@@ -84,6 +84,129 @@ class BoardsRepository extends AdminRepository {
       return this.errorResponse(error, 'retrieveAllBoards');
     }
   }
+
+  /**
+   * get board following to ID - optimized version
+   * @param {string} boardId - Board ID
+   * @param {Object} options - Query options
+   * @param {Array} options.select - Select to specific fields 
+   * @returns {Promise<Object>} Query result with data
+   */
+  async retrieveBoardsById(boardId, options = {}) {
+    try {
+      if (!boardId || typeof boardId !== 'string' || boardId.trim() === '') {
+        return {
+          success: false,
+          message: 'Valid board ID is required',
+          code: 'INVALID_ID'
+        };
+      }
+
+      const docRef = this.collectionRef.doc(boardId);
+      const doc = await docRef.get();
+
+      if (!doc.exists) {
+        return {
+          success: false,
+          message: 'Board not found',
+          code: 'NOT_FOUND'
+        };
+      }
+
+      let boardData = doc.data();
+
+      if (options.select && Array.isArray(options.select)) {
+        boardData = this.selectFields(boardData, options.select, {
+          includeDefaultFields: ['id'], 
+          includeMissing: false 
+        });
+      }
+
+      return {
+        success: true,
+        data: boardData,
+        cached: false,
+        code: 'SUCCESS'
+      };
+
+    } catch (error) {
+      return this.errorResponse(error, 'retrieveBoardsById');
+    }
+  }
+
+   /**
+   * get boards following to IDs list
+   * @param {Array<string>} boardIds - Array board IDs
+   * @param {Object} options - Query options
+   * @returns {Promise<Object>} Query result with data
+   */
+  async retrieveBoardsByIds(boardIds, options = {}) {
+    try {
+      if (!Array.isArray(boardIds) || boardIds.length === 0) {
+        return {
+          success: false,
+          message: 'Board IDs array is required and must not be empty',
+          code: 'INVALID_INPUT'
+        };
+      }
+
+      const invalidIds = boardIds.filter(id => 
+        !id || typeof id !== 'string' || id.trim() === ''
+      );
+      
+      if (invalidIds.length > 0) {
+        return {
+          success: false,
+          message: 'Invalid board IDs found',
+          invalidIds: invalidIds,
+          code: 'INVALID_IDS'
+        };
+      }
+
+      const MAX_BATCH_SIZE = 30; 
+      if (boardIds.length > MAX_BATCH_SIZE) {
+        return {
+          success: false,
+          message: `Maximum ${MAX_BATCH_SIZE} boards can be retrieved at once`,
+          code: 'MAX_LIMIT_EXCEEDED'
+        };
+      }
+
+      const uniqueIds = [...new Set(boardIds)];
+      
+      const docPromises = uniqueIds.map(id => 
+        this.collectionRef.doc(id).get()
+      );
+
+      const docSnapshots = await Promise.all(docPromises);
+
+      const boards = [];
+      
+      docSnapshots.forEach((docSnapshot) => {
+        
+        if (docSnapshot.exists) {
+          let boardData = docSnapshot.data();
+          
+          if (options.select && Array.isArray(options.select)) {
+            boardData = this.selectFields(boardData, options.select, {
+              includeDefaultFields: ['id'], 
+              includeMissing: false 
+            });
+          }
+          
+          boards.push(boardData);
+        } 
+      });
+
+      return {
+        success: true,
+        data: boards,
+        count: boards.length,
+      };
+    } catch (error) {
+      return this.errorResponse(error, 'retrieveBoardsById');
+    }
+  }
 }
 
 module.exports = {

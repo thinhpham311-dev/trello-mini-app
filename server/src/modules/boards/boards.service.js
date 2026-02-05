@@ -1,4 +1,3 @@
-// src/modules/boards/boards.service.js
 const { BoardsRepository } = require('./boards.repository.js');
 const { Board } = require('./boards.model.js');
 
@@ -48,7 +47,67 @@ async getAllBoards(options = {}) {
         };
     }
 }
+    async getBoardsById(boardId) {
+        try {
+            if (!boardId || typeof boardId !== 'string' || boardId.trim() === '') {
+                return {
+                    success: false,
+                    message: 'Board ID is required',
+                    code: 'INVALID_INPUT'
+                };
+            }
+            return await this.repository.retrieveBoardsById(boardId, {
+                select: ['name', 'description']
+            });
 
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Failed to retrieve boards',
+                error: error.message,
+                code: 'INTERNAL_ERROR'
+            };
+        }
+    }
+
+
+    async getBoardsByIds(boardIds) {
+        try {
+            if (!Array.isArray(boardIds) || boardIds.length === 0) {
+                return {
+                    success: false,
+                    message: 'Board IDs array is required',
+                    code: 'INVALID_INPUT'
+                };
+            }
+
+            const validIds = boardIds.filter(id => 
+                id && typeof id === 'string' && id.trim() !== ''
+            );
+
+            if (validIds.length === 0) {
+                return {
+                    success: true,
+                    data: [],
+                    count: 0,
+                    message: 'No valid board IDs provided',
+                    code: 'SUCCESS'
+                };
+            }
+
+            return await this.repository.retrieveBoardsByIds(validIds,  {
+                select: ['name', 'description']
+            });
+
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Failed to retrieve boards',
+                error: error.message,
+                code: 'INTERNAL_ERROR'
+            };
+        }
+    }
 }
 
 const boardsService = new BoardsService();
