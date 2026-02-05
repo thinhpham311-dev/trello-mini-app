@@ -1,11 +1,13 @@
 import React from 'react'
 import Header from '../template/Header'
 import View from '../../views'
+import SideNavToggle from '../template/SideNavToggle'
+
 
 const HeaderActionsStart = () => {
 	return (
 		<>
-			header action start
+			<SideNavToggle/>
 		</>
 	)
 }
