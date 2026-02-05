@@ -2,11 +2,12 @@ import React from 'react'
 import Header from '../template/Header'
 import View from '../../views'
 import SideNavToggle from '../template/SideNavToggle'
-
+import MobileNav from '../template/MobileNav'
 
 const HeaderActionsStart = () => {
 	return (
 		<>
+					<MobileNav />
 			<SideNavToggle/>
 		</>
 	)
