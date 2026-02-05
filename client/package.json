@@ -12,8 +12,10 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
     "@tailwindcss/typography": "^0.5.19",
+    "autoprefixer": "^10.4.24",
     "classnames": "^2.5.1",
     "history": "^5.3.0",
+    "postcss": "^8.5.6",
     "prop-types": "^15.8.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -23,7 +25,8 @@
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
     "tailwind-safelist-generator": "^1.0.0",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "twin.macro": "^3.4.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -37,7 +40,6 @@
     "globals": "^16.5.0",
     "vite": "npm:rolldown-vite@7.2.5"
   },
-
   "browserslist": {
     "production": [
       ">0.2%",
