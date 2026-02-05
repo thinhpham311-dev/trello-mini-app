@@ -41,11 +41,6 @@ Board.prototype.validate = function() {
     errors.push('Description cannot exceed 1000 characters');
   }
 
-
-  const validStatuses = ['active', 'archived'];
-  if (this.status && !validStatuses.includes(this.status)) {
-    errors.push('Status must be either "active" or "archived"');
-  }
   
   return {
     isValid: errors.length === 0,
