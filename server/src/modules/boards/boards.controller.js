@@ -34,6 +34,42 @@ const createBoard = async function(req, res) {
   }
 };
 
+const updateBoard = async function(req, res) {
+    try{
+
+        const {id} =  req.params;
+        const {name, description} = req.body;
+        
+        if(!id || typeof id !== 'string' || id.trim() === ''){
+            return errorResponse(res, 400, 'Board ID is required');
+        }
+        
+        const boardData = {};
+        if(name && typeof name === 'string'){
+            boardData.name = name.trim();
+        }
+        if(description && typeof description === 'string'){
+            boardData.description = description.trim();
+        }
+        
+        const result = await boardsService.updateBoard(id.trim(), boardData);
+        
+        if(!result.success){
+            if(result.errors && result.errors.length > 0){
+                return errorResponse(res, 400, result.errors.join(', '));
+            }
+            return errorResponse(res, 400, result.error || 'Failed to update board');
+        }
+        
+        return successResponse(res, 200, {
+            id: id,
+            ...boardData
+        });
+    } catch(error){
+        return errorResponse(res, 500, 'Internal server error');
+    }
+}
+
 const getAllBoards = async(req, res) =>{
     try {
       const options = {
@@ -95,6 +131,7 @@ const getBoardsByIds = async function(req, res) {
 
 module.exports = {
   createBoard: createBoard,
+  updateBoard: updateBoard,
   getAllBoards: getAllBoards,
   getBoardsById: getBoardsById,
   getBoardsByIds: getBoardsByIds

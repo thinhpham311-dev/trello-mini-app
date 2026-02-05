@@ -28,6 +28,25 @@ class BoardsService {
         }
     };
 
+    updateBoard = async function(boardId, boardData) {
+        try {      
+            const board = Board.update(boardData);
+            const validation = board.validate();
+            if (!validation.isValid) {
+              return {
+                  success: false,
+                  errors: validation.errors
+                };
+            }
+
+            return await this.repository.update(boardId, board.toJSON());
+        } catch (error) {
+            return {
+                success: false,
+                error: 'Failed to update board: ' + error.message
+            };
+        }
+    }
     /**
    * Lấy tất cả boards với các tùy chọn
    * @param {Object} options - Tùy chọn query

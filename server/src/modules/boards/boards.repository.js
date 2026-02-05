@@ -39,6 +39,34 @@ class BoardsRepository extends AdminRepository {
     }
   }
 
+  async update(boardId, boardData) {
+    try {
+      const board = new Board(boardData);
+      const validation = board.validate();
+      
+      if (!validation.isValid) {
+        return {
+          success: false,
+          errors: validation.errors,
+          message: 'Board validation failed'
+        };
+      }
+      
+      const docRef = this.collectionRef.doc(boardId);
+      
+      await docRef.update(board.toJSON());
+      
+      return {
+        success: true,
+        id: boardId,
+        data: board.toJSON(),
+      };
+      
+    } catch (error) {
+      return this.errorResponse(error, 'update');
+    }
+  }
+
   /**
    * Retrieve all boards with pagination and search
    * @param {Object} options - Query options
