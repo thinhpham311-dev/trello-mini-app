@@ -16,7 +16,7 @@ export const themeConfig = {
     controlSize: 'md',
     navMode: THEME_ENUM.NAV_MODE_DARK,
     layout: {
-        type: THEME_ENUM.LAYOUT_TYPE_MODERN,
+        type: THEME_ENUM.LAYOUT_TYPE_SIMPLE,
         sideNavCollapse: false,
     },
 }

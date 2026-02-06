@@ -9,7 +9,7 @@ import {
 import Logo from '../template/Logo'
 import { useSelector } from 'react-redux'
 import View from '../../views'
-import SideNav from '../template/SideNav'
+import DiscoverDropdown from '../template/DiscoverDropdown'
 
 const HeaderActionsStart = () => {
 	const navMode = useSelector(state => state.theme.navMode)
@@ -28,6 +28,7 @@ const HeaderActionsStart = () => {
 	}
 	return (
 		<>
+			<DiscoverDropdown />
 			<Logo 
 				imgClass="w-[36px] h-[36px]"
 				mode={logoMode()} 
